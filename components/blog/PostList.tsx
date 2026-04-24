@@ -17,27 +17,26 @@ export default function PostList({ posts, activeSlug }: PostListProps) {
 
   if (posts.length === 0) {
     return (
-      <div className="border border-slate-200 bg-white py-20 text-center">
-        <p className="text-sm font-medium text-blog-muted">
+      <div className="rounded-2xl border border-slate-200 bg-white py-20 text-center">
+        <p className="text-sm font-medium text-slate-500">
           {categoryLabel
-            ? `'${categoryLabel}' 카테고리에 아직 사진이 없습니다.`
-            : '게시된 사진이 없습니다.'}
+            ? `'${categoryLabel}' 카테고리에 아직 글이 없습니다.`
+            : '게시된 글이 없습니다.'}
         </p>
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {posts.map((post, i) => (
         <motion.div
           key={post.id}
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.58, delay: i * 0.035, ease: EASE_OUT }}
-          className={i % 9 === 0 ? 'sm:col-span-2 sm:row-span-2' : undefined}
         >
-          <PostCard post={post} featured={i % 9 === 0} />
+          <PostCard post={post} />
         </motion.div>
       ))}
     </div>

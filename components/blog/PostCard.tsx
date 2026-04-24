@@ -4,28 +4,27 @@ import { getFeaturedImage, stripHtml } from '@/lib/wordpress'
 
 interface PostCardProps {
   post: WPPost
-  featured?: boolean
 }
 
-export default function PostCard({ post, featured = false }: PostCardProps) {
+export default function PostCard({ post }: PostCardProps) {
   const image = getFeaturedImage(post)
 
   return (
     <Link
       href={`/blog/${post.id}`}
-      className="group relative block h-full overflow-hidden bg-slate-950"
+      className="group block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-950/10"
     >
-      <div className={featured ? 'aspect-[4/5] h-full' : 'aspect-[4/5]'}>
+      <div className="aspect-[4/3] overflow-hidden bg-slate-100">
         {image ? (
           <img
             src={image}
             alt={stripHtml(post.title.rendered)}
-            className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+            className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-slate-950">
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-950 to-slate-700 text-white">
             <span
-              className="text-3xl italic text-white/35"
+              className="text-3xl italic text-white/45"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               PINO
@@ -33,11 +32,9 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
           </div>
         )}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/72 via-slate-950/0 to-transparent opacity-80 transition duration-300 group-hover:opacity-95" />
-      <div className="absolute bottom-0 left-0 right-0 translate-y-1 p-4 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+      <div className="p-3">
         <h3
-          className="line-clamp-2 text-[18px] font-medium leading-tight text-white"
-          style={{ fontFamily: 'var(--font-display)' }}
+          className="line-clamp-2 min-h-[38px] text-[13px] font-semibold leading-[1.45] text-slate-900 transition group-hover:text-blog-orange"
           dangerouslySetInnerHTML={{ __html: post.title.rendered }}
         />
       </div>
