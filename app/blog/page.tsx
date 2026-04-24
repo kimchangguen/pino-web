@@ -26,7 +26,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const categories = await getCategories()
   const activeCat = cat ? categories.find((c) => c.slug === cat) : undefined
 
-  // ── 카테고리 필터 뷰 ──────────────────────────────────────────
+  // ── 카테고리 필터 뷰 (/blog?cat=slug) ───────────────────────
   if (activeCat) {
     const posts = await getPostsByCategory(activeCat.id, 30)
 
@@ -72,37 +72,30 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     )
   }
 
-  // ── 매거진 홈 뷰 ─────────────────────────────────────────────
-  // 각 카테고리별 최신 4개 포스트를 병렬 fetch
+  // ── 매거진 홈 뷰 (/blog) ────────────────────────────────────
+  // 6개 카테고리 × 최신 9개 포스트 병렬 fetch
   const postsPerCategory = await Promise.all(
     CATEGORY_ORDER.map((def) => {
-      const cat = categories.find((c) => c.slug === def.slug)
-      return cat ? getPostsByCategory(cat.id, 4) : Promise.resolve([])
+      const found = categories.find((c) => c.slug === def.slug)
+      return found ? getPostsByCategory(found.id, 9) : Promise.resolve([])
     })
   )
 
+  // 카테고리 + 포스트 쌍 구성 (포스트가 1개 이상인 것만)
+  const sections = CATEGORY_ORDER.flatMap((def, i) => {
+    const category = categories.find((c) => c.slug === def.slug)
+    if (!category || postsPerCategory[i].length === 0) return []
+    return [{ category, posts: postsPerCategory[i] }]
+  })
+
   return (
     <main className="min-h-screen bg-[#fafaf6]">
-      {/* 히어로 배너 */}
+      {/* ── 히어로 배너 ── */}
       <BlogHero />
 
-      {/* 카테고리 섹션들 */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-4 pb-20">
-        {CATEGORY_ORDER.map((def, i) => {
-          const category = categories.find((c) => c.slug === def.slug)
-          if (!category) return null
-          return (
-            <CategorySection
-              key={def.slug}
-              category={category}
-              posts={postsPerCategory[i]}
-              index={i}
-            />
-          )
-        })}
-
-        {/* 카테고리가 하나도 없을 때 */}
-        {categories.length === 0 && (
+      {/* ── 카테고리 섹션 (2컬럼 페어 레이아웃) ── */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-24">
+        {sections.length === 0 ? (
           <div className="py-24 text-center">
             <p
               className="text-[#8c8c86] text-sm"
@@ -110,6 +103,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             >
               카테고리를 불러올 수 없습니다. WordPress 연결을 확인해 주세요.
             </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-14">
+            {sections.map(({ category, posts }, i) => (
+              <CategorySection
+                key={category.slug}
+                category={category}
+                posts={posts}
+                index={i}
+              />
+            ))}
           </div>
         )}
       </div>
