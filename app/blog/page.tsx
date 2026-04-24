@@ -15,7 +15,7 @@ import {
 export const metadata: Metadata = {
   title: 'Blog | PINO STUDIO',
   description:
-    '광고 운영 노하우, 콘텐츠 제작 팁, 브랜드 성장 인사이트를 전하는 애드그릿 블로그입니다.',
+    '배우, 강사, 비즈니스 프로필부터 개인 화보까지 PINO STUDIO의 프로필 사진 포트폴리오와 촬영 이야기를 전합니다.',
 }
 
 interface BlogPageProps {
@@ -31,30 +31,27 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     const posts = await getPostsByCategory(activeCat.id, 30)
 
     return (
-      <main className="min-h-screen bg-blog-wash">
+      <main className="min-h-screen bg-white">
         <section className="blog-rings bg-white pt-28 md:pt-32">
-          <div className="mx-auto max-w-[1080px] px-5 pb-9 sm:px-8">
-            <p className="mb-2 text-[11px] font-extrabold text-blog-orange">
-              ADGRIT BLOG
+          <div className="mx-auto max-w-7xl px-5 pb-10 sm:px-8 lg:px-12">
+            <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.32em] text-blog-orange">
+              PINO STUDIO JOURNAL
             </p>
-            <h1 className="text-[34px] font-black leading-tight tracking-normal text-blog-navy sm:text-[42px]">
+            <h1
+              className="text-[42px] font-medium leading-tight tracking-normal text-blog-navy sm:text-[56px]"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
               {activeCat.name}
             </h1>
-            <p className="mt-3 text-[13px] leading-6 text-blog-muted">
-              선택한 카테고리의 최신 글을 한눈에 살펴보세요.
+            <p className="mt-4 max-w-[520px] text-[15px] leading-7 text-blog-muted">
+              프로필 사진의 분위기, 표정, 스타일을 큼직한 이미지로 살펴보세요.
             </p>
           </div>
         </section>
 
         <CategoryTabs categories={categories} activeSlug={activeCat.slug} />
 
-        <div className="mx-auto max-w-[1080px] px-5 py-10 sm:px-8 md:py-12">
-          <div className="mb-5 flex items-center gap-2 border-b-2 border-blog-blue pb-2">
-            <span className="h-2 w-2 bg-blog-orange" />
-            <p className="text-[13px] font-extrabold text-blog-navy">
-              {activeCat.name} · {posts.length}개의 글
-            </p>
-          </div>
+        <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-12">
           <Suspense>
             <PostList posts={posts} activeSlug={activeCat.slug} />
           </Suspense>
@@ -66,11 +63,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   }
 
   const [featuredPosts, postsPerCategory] = await Promise.all([
-    getPosts(5),
+    getPosts(6),
     Promise.all(
       CATEGORY_ORDER.map((def) => {
         const found = categories.find((c) => c.slug === def.slug)
-        return found ? getPostsByCategory(found.id, 6) : Promise.resolve([])
+        return found ? getPostsByCategory(found.id, 7) : Promise.resolve([])
       })
     ),
   ])
@@ -82,27 +79,25 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   })
 
   return (
-    <main className="min-h-screen bg-blog-wash">
+    <main className="min-h-screen bg-white">
       <BlogHero posts={featuredPosts} />
 
-      <div className="mx-auto max-w-[1080px] px-5 pb-20 pt-9 sm:px-8 md:pb-24">
+      <div className="mx-auto max-w-7xl space-y-16 px-5 pb-24 pt-6 sm:px-8 md:pb-28 lg:px-12">
         {sections.length === 0 ? (
-          <div className="rounded-[5px] border border-blog-border bg-white py-20 text-center">
-            <p className="text-sm font-semibold text-blog-muted">
+          <div className="border border-slate-200 bg-white py-20 text-center">
+            <p className="text-sm font-medium text-blog-muted">
               카테고리를 불러오지 못했습니다. WordPress 연결을 확인해 주세요.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-x-9 gap-y-11 lg:grid-cols-2">
-            {sections.map(({ category, posts }, i) => (
-              <CategorySection
-                key={category.slug}
-                category={category}
-                posts={posts}
-                index={i}
-              />
-            ))}
-          </div>
+          sections.map(({ category, posts }, i) => (
+            <CategorySection
+              key={category.slug}
+              category={category}
+              posts={posts}
+              index={i}
+            />
+          ))
         )}
       </div>
 

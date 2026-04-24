@@ -1,6 +1,8 @@
 const WP_URL =
   process.env.WP_URL || 'https://wordpress-1580849-6373725.cloudwaysapps.com'
 
+const WP_REST_BASE_URL = WP_URL.replace(/\/graphql\/?$/, '').replace(/\/$/, '')
+
 export interface WPPost {
   id: number
   date: string
@@ -25,11 +27,11 @@ export interface WPCategory {
 }
 
 export const CATEGORY_ORDER = [
-  { slug: 'notice', label: '공지사항 이벤트' },
-  { slug: 'review', label: '리얼 후기' },
-  { slug: 'behind', label: '비하인드' },
-  { slug: 'guide', label: '촬영 가이드' },
-  { slug: 'branding', label: '스튜디오 브랜딩' },
+  { slug: 'notice', label: '공지사항' },
+  { slug: 'review', label: '촬영 후기' },
+  { slug: 'behind', label: '프로필 비하인드' },
+  { slug: 'guide', label: '프로필 촬영 가이드' },
+  { slug: 'branding', label: '퍼스널 브랜딩' },
   { slug: 'portfolio', label: '포트폴리오' },
 ] as const
 
@@ -40,7 +42,7 @@ export async function getCategories(): Promise<WPCategory[]> {
 
   try {
     const res = await fetch(
-      `${WP_URL}/wp-json/wp/v2/categories?slug=${slugs}&per_page=20`,
+      `${WP_REST_BASE_URL}/wp-json/wp/v2/categories?slug=${slugs}&per_page=20`,
       { next: { revalidate: 3600 } }
     )
     if (!res.ok) return []
@@ -57,7 +59,7 @@ export async function getCategories(): Promise<WPCategory[]> {
 
 export async function getPosts(perPage = 12): Promise<WPPost[]> {
   try {
-    const res = await fetch(`${WP_URL}/wp-json/wp/v2/posts?_embed&per_page=${perPage}`, {
+    const res = await fetch(`${WP_REST_BASE_URL}/wp-json/wp/v2/posts?_embed&per_page=${perPage}`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return []
@@ -75,7 +77,7 @@ export async function getPostsByCategory(
   if (categoryId) params.set('categories', String(categoryId))
 
   try {
-    const res = await fetch(`${WP_URL}/wp-json/wp/v2/posts?${params}`, {
+    const res = await fetch(`${WP_REST_BASE_URL}/wp-json/wp/v2/posts?${params}`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return []
@@ -87,7 +89,7 @@ export async function getPostsByCategory(
 
 export async function getPost(id: string): Promise<WPPost | null> {
   try {
-    const res = await fetch(`${WP_URL}/wp-json/wp/v2/posts/${id}?_embed`, {
+    const res = await fetch(`${WP_REST_BASE_URL}/wp-json/wp/v2/posts/${id}?_embed`, {
       next: { revalidate: 3600 },
     })
     if (!res.ok) return null
