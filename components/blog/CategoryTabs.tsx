@@ -9,29 +9,21 @@ interface CategoryTabsProps {
 
 export default function CategoryTabs({ categories, activeSlug }: CategoryTabsProps) {
   return (
-    <div className="border-b border-[#e5e2da] bg-[#fafaf6] sticky top-16 z-40">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        {/* 가로 스크롤 컨테이너 */}
+    <div className="sticky top-16 z-40 border-y border-blog-border bg-white/95 backdrop-blur">
+      <div className="mx-auto max-w-[1080px] px-5 sm:px-8">
         <nav
-          className="flex gap-0 overflow-x-auto scrollbar-none"
+          className="flex gap-1 overflow-x-auto py-3"
           style={{ WebkitOverflowScrolling: 'touch' }}
           aria-label="카테고리 필터"
         >
-          {/* 전체 탭 */}
-          <TabItem
-            href="/blog"
-            label="전체"
-            isActive={!activeSlug}
-          />
-
-          {/* 카테고리별 탭 – CATEGORY_ORDER 순서 유지 */}
+          <TabItem href="/blog" label="전체" isActive={!activeSlug} />
           {CATEGORY_ORDER.map((def) => {
             const cat = categories.find((c) => c.slug === def.slug)
             return (
               <TabItem
                 key={def.slug}
                 href={`/blog?cat=${def.slug}`}
-                label={def.label}
+                label={cat?.name || def.label}
                 isActive={activeSlug === def.slug}
                 count={cat?.count}
               />
@@ -59,28 +51,17 @@ function TabItem({
       href={href}
       scroll={false}
       replace
-      className={`
-        relative shrink-0 flex items-center gap-1.5
-        py-4 px-4 text-sm transition-colors duration-200
-        whitespace-nowrap
-        ${isActive
-          ? 'text-[#1a1a18] font-medium'
-          : 'text-[#8c8c86] hover:text-[#1a1a18]'
-        }
-      `}
-      style={{ fontFamily: 'var(--font-sans)' }}
+      className={`shrink-0 rounded-full border px-4 py-2 text-[12px] font-bold transition ${
+        isActive
+          ? 'border-blog-blue bg-blog-blue text-white'
+          : 'border-blog-border bg-white text-blog-muted hover:border-blog-blue hover:text-blog-blue'
+      }`}
     >
       {label}
       {typeof count === 'number' && count > 0 && (
-        <span
-          className={`text-[10px] tabular-nums ${isActive ? 'text-[#c8a876]' : 'text-[#c0bdb5]'}`}
-        >
+        <span className={isActive ? 'ml-1.5 text-white/75' : 'ml-1.5 text-blog-orange'}>
           {count}
         </span>
-      )}
-      {/* 활성 탭 언더라인 */}
-      {isActive && (
-        <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#c8a876]" />
       )}
     </Link>
   )

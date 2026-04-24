@@ -13,6 +13,14 @@
   --color-studio-text: #1a1a18;
   --color-studio-muted: #8c8c86;
   --color-studio-border: #e5e2da;
+  --color-blog-navy: #08246b;
+  --color-blog-blue: #1738a8;
+  --color-blog-orange: #ff8a00;
+  --color-blog-ink: #111827;
+  --color-blog-muted: #667085;
+  --color-blog-border: #d8e0ef;
+  --color-blog-surface: #ffffff;
+  --color-blog-wash: #f5f7fb;
 }
 
 html {
@@ -99,4 +107,11 @@ h1, h2, h3 {
   opacity: 0.035;
   pointer-events: none;
   mix-blend-mode: overlay;
+}
+
+.blog-rings {
+  background-image:
+    radial-gradient(circle at 96% 0%, rgba(8, 36, 107, 0.08) 0 20%, transparent 20.5%),
+    radial-gradient(ellipse 120% 70% at 68% 0%, transparent 0 46%, rgba(23, 56, 168, 0.11) 46.3% 46.8%, transparent 47.1%),
+    radial-gradient(ellipse 115% 60% at 50% 18%, transparent 0 51%, rgba(23, 56, 168, 0.09) 51.2% 51.7%, transparent 52%);
 }

@@ -1,20 +1,21 @@
 import { Suspense } from 'react'
-import {
-  getCategories,
-  getPostsByCategory,
-  CATEGORY_ORDER,
-} from '@/lib/wordpress'
+import type { Metadata } from 'next'
 import BlogHero from '@/components/blog/BlogHero'
 import CategorySection from '@/components/blog/CategorySection'
 import CategoryTabs from '@/components/blog/CategoryTabs'
-import PostList from '@/components/blog/PostList'
 import Footer from '@/components/Footer'
-import type { Metadata } from 'next'
+import PostList from '@/components/blog/PostList'
+import {
+  CATEGORY_ORDER,
+  getCategories,
+  getPosts,
+  getPostsByCategory,
+} from '@/lib/wordpress'
 
 export const metadata: Metadata = {
   title: 'Blog | PINO STUDIO',
   description:
-    '피노스튜디오의 촬영 이야기, 후기, 가이드 등 다양한 이야기를 담은 블로그입니다.',
+    '광고 운영 노하우, 콘텐츠 제작 팁, 브랜드 성장 인사이트를 전하는 애드그릿 블로그입니다.',
 }
 
 interface BlogPageProps {
@@ -26,42 +27,34 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const categories = await getCategories()
   const activeCat = cat ? categories.find((c) => c.slug === cat) : undefined
 
-  // ── 카테고리 필터 뷰 (/blog?cat=slug) ───────────────────────
   if (activeCat) {
     const posts = await getPostsByCategory(activeCat.id, 30)
 
     return (
-      <main className="min-h-screen bg-[#fafaf6]">
-        <div className="pt-36 pb-10">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <p
-              className="text-[#c8a876] text-xs tracking-[0.4em] uppercase mb-4"
-              style={{ fontFamily: 'var(--font-sans)' }}
-            >
-              Blog
+      <main className="min-h-screen bg-blog-wash">
+        <section className="blog-rings bg-white pt-28 md:pt-32">
+          <div className="mx-auto max-w-[1080px] px-5 pb-9 sm:px-8">
+            <p className="mb-2 text-[11px] font-extrabold text-blog-orange">
+              ADGRIT BLOG
             </p>
-            <h1
-              className="text-[#1a1a18] leading-tight"
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2.25rem, 5vw, 4rem)',
-                fontWeight: 400,
-              }}
-            >
+            <h1 className="text-[34px] font-black leading-tight tracking-normal text-blog-navy sm:text-[42px]">
               {activeCat.name}
             </h1>
+            <p className="mt-3 text-[13px] leading-6 text-blog-muted">
+              선택한 카테고리의 최신 글을 한눈에 살펴보세요.
+            </p>
           </div>
-        </div>
+        </section>
 
         <CategoryTabs categories={categories} activeSlug={activeCat.slug} />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12 md:py-16 min-h-[50vh]">
-          <p
-            className="text-[#8c8c86] text-xs tracking-[0.25em] uppercase mb-8"
-            style={{ fontFamily: 'var(--font-sans)' }}
-          >
-            {activeCat.name} · {posts.length}개의 글
-          </p>
+        <div className="mx-auto max-w-[1080px] px-5 py-10 sm:px-8 md:py-12">
+          <div className="mb-5 flex items-center gap-2 border-b-2 border-blog-blue pb-2">
+            <span className="h-2 w-2 bg-blog-orange" />
+            <p className="text-[13px] font-extrabold text-blog-navy">
+              {activeCat.name} · {posts.length}개의 글
+            </p>
+          </div>
           <Suspense>
             <PostList posts={posts} activeSlug={activeCat.slug} />
           </Suspense>
@@ -72,16 +65,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     )
   }
 
-  // ── 매거진 홈 뷰 (/blog) ────────────────────────────────────
-  // 6개 카테고리 × 최신 9개 포스트 병렬 fetch
-  const postsPerCategory = await Promise.all(
-    CATEGORY_ORDER.map((def) => {
-      const found = categories.find((c) => c.slug === def.slug)
-      return found ? getPostsByCategory(found.id, 9) : Promise.resolve([])
-    })
-  )
+  const [featuredPosts, postsPerCategory] = await Promise.all([
+    getPosts(5),
+    Promise.all(
+      CATEGORY_ORDER.map((def) => {
+        const found = categories.find((c) => c.slug === def.slug)
+        return found ? getPostsByCategory(found.id, 6) : Promise.resolve([])
+      })
+    ),
+  ])
 
-  // 카테고리 + 포스트 쌍 구성 (포스트가 1개 이상인 것만)
   const sections = CATEGORY_ORDER.flatMap((def, i) => {
     const category = categories.find((c) => c.slug === def.slug)
     if (!category || postsPerCategory[i].length === 0) return []
@@ -89,23 +82,18 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   })
 
   return (
-    <main className="min-h-screen bg-[#fafaf6]">
-      {/* ── 히어로 배너 ── */}
-      <BlogHero />
+    <main className="min-h-screen bg-blog-wash">
+      <BlogHero posts={featuredPosts} />
 
-      {/* ── 카테고리 섹션 (2컬럼 페어 레이아웃) ── */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-24">
+      <div className="mx-auto max-w-[1080px] px-5 pb-20 pt-9 sm:px-8 md:pb-24">
         {sections.length === 0 ? (
-          <div className="py-24 text-center">
-            <p
-              className="text-[#8c8c86] text-sm"
-              style={{ fontFamily: 'var(--font-sans)' }}
-            >
-              카테고리를 불러올 수 없습니다. WordPress 연결을 확인해 주세요.
+          <div className="rounded-[5px] border border-blog-border bg-white py-20 text-center">
+            <p className="text-sm font-semibold text-blog-muted">
+              카테고리를 불러오지 못했습니다. WordPress 연결을 확인해 주세요.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-14">
+          <div className="grid grid-cols-1 gap-x-9 gap-y-11 lg:grid-cols-2">
             {sections.map(({ category, posts }, i) => (
               <CategorySection
                 key={category.slug}

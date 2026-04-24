@@ -1,109 +1,125 @@
+'use client'
+
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { CATEGORY_ORDER } from '@/lib/wordpress'
+import type { WPPost } from '@/lib/wordpress'
+import { formatDate, getFeaturedImage, stripHtml } from '@/lib/wordpress'
 
-export default function BlogHero() {
+interface BlogHeroProps {
+  posts: WPPost[]
+}
+
+export default function BlogHero({ posts }: BlogHeroProps) {
+  const slides = useMemo(() => posts.slice(0, 5), [posts])
+  const [activeIndex, setActiveIndex] = useState(0)
+  const activePost = slides[activeIndex]
+  const image = activePost ? getFeaturedImage(activePost) : null
+  const excerpt = activePost ? stripHtml(activePost.excerpt.rendered) : ''
+
   return (
-    <div
-      className="relative overflow-hidden grain"
-      style={{ background: 'linear-gradient(160deg, #131210 0%, #1e1c18 50%, #0e0d0b 100%)' }}
-    >
-      {/* 라디얼 글로우 */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 70% 60% at 30% 50%, rgba(200,168,118,0.07) 0%, transparent 70%)',
-        }}
-      />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pt-36 pb-16 md:pb-20">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-          {/* 왼쪽: 타이틀 */}
-          <div>
-            <p
-              className="text-[#c8a876] text-xs tracking-[0.4em] uppercase mb-5"
-              style={{ fontFamily: 'var(--font-sans)' }}
+    <section className="blog-rings bg-blog-surface pt-28 md:pt-32">
+      <div className="mx-auto max-w-[1080px] px-5 sm:px-8">
+        <div className="max-w-[520px] pb-7">
+          <p className="mb-2 text-[11px] font-extrabold tracking-tight text-blog-orange">
+            ADGRIT BLOG
+          </p>
+          <h1 className="text-[34px] font-black leading-[1.04] tracking-normal text-blog-navy sm:text-[42px]">
+            마케팅의 모든 것,
+            <br />
+            애드그릿 블로그
+          </h1>
+          <p className="mt-4 max-w-[360px] text-[13px] leading-6 text-blog-muted">
+            실전 광고 운영 노하우와 콘텐츠 제작 팁, 브랜드 성장에 필요한 인사이트를 한곳에서 만나보세요.
+          </p>
+          <div className="mt-6 flex gap-2.5">
+            <Link
+              href="/#contact"
+              className="rounded-full bg-blog-blue px-5 py-2.5 text-[12px] font-bold text-white shadow-[0_8px_18px_rgba(23,56,168,0.18)] transition hover:bg-blog-navy"
             >
-              Pino Studio — Blog
-            </p>
-            <h1
-              className="text-white leading-tight mb-6"
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(2rem, 4.5vw, 3.5rem)',
-                fontWeight: 400,
-                letterSpacing: '-0.015em',
-              }}
+              광고문의
+            </Link>
+            <Link
+              href="/#portfolio"
+              className="rounded-full border border-blog-border bg-white px-5 py-2.5 text-[12px] font-bold text-blog-blue transition hover:border-blog-blue"
             >
-              빛과 순간을 담은<br />
-              <em>피노스튜디오</em>의 모든 것
-            </h1>
-            <p
-              className="text-white/50 text-sm leading-relaxed mb-8"
-              style={{ fontFamily: 'var(--font-sans)' }}
-            >
-              촬영 후기, 비하인드 스토리, 촬영 가이드까지<br />
-              스튜디오의 모든 이야기를 한 곳에서 만나보세요.
-            </p>
-
-            {/* CTA 버튼 */}
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="/#contact"
-                className="inline-flex items-center px-6 py-2.5 bg-[#c8a876] text-[#111110] text-xs tracking-[0.25em] uppercase font-medium hover:bg-[#e0c99a] transition-colors duration-300"
-                style={{ fontFamily: 'var(--font-sans)' }}
-              >
-                촬영 문의하기
-              </a>
-              <a
-                href="/#portfolio"
-                className="inline-flex items-center px-6 py-2.5 border border-white/20 text-white/60 text-xs tracking-[0.25em] uppercase hover:border-[#c8a876]/50 hover:text-[#c8a876] transition-colors duration-300"
-                style={{ fontFamily: 'var(--font-sans)' }}
-              >
-                포트폴리오 보기
-              </a>
-            </div>
-          </div>
-
-          {/* 오른쪽: 카테고리 소제목 리스트 */}
-          <div className="hidden lg:block">
-            <p
-              className="text-white/30 text-[10px] tracking-[0.3em] uppercase mb-5"
-              style={{ fontFamily: 'var(--font-sans)' }}
-            >
-              카테고리
-            </p>
-            <ul className="space-y-3">
-              {CATEGORY_ORDER.map((cat, i) => (
-                <li key={cat.slug}>
-                  <Link
-                    href={`/blog?cat=${cat.slug}`}
-                    className="group flex items-center gap-3 text-white/50 hover:text-[#c8a876] transition-colors duration-300"
-                    style={{ fontFamily: 'var(--font-sans)' }}
-                  >
-                    <span className="text-[#c8a876]/40 text-[10px] tabular-nums w-4">
-                      0{i + 1}
-                    </span>
-                    <span className="text-sm group-hover:translate-x-1 transition-transform duration-300 inline-block">
-                      {cat.label}
-                    </span>
-                    <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      →
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+              포트폴리오
+            </Link>
           </div>
         </div>
-      </div>
 
-      {/* 하단 페이드 */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
-        style={{ background: 'linear-gradient(to bottom, transparent, #fafaf6)' }}
-      />
-    </div>
+        <div className="relative overflow-hidden rounded-[5px] bg-[#101827] shadow-[0_16px_42px_rgba(8,36,107,0.16)]">
+          {activePost ? (
+            <Link href={`/blog/${activePost.id}`} className="group block">
+              <div className="relative aspect-[2.55/1] min-h-[210px] overflow-hidden sm:min-h-[250px]">
+                {image ? (
+                  <img
+                    src={image}
+                    alt={stripHtml(activePost.title.rendered)}
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-[linear-gradient(135deg,#0f1f45_0%,#2764a8_48%,#101827_100%)]" />
+                )}
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,17,38,0.76),rgba(7,17,38,0.24)_48%,rgba(7,17,38,0.12))]" />
+                <div className="absolute bottom-0 left-0 max-w-[720px] p-5 text-white sm:p-7">
+                  <p className="mb-2 text-[11px] font-bold text-white/80">
+                    {formatDate(activePost.date)}
+                  </p>
+                  <h2
+                    className="line-clamp-2 text-[20px] font-extrabold leading-tight sm:text-[28px]"
+                    dangerouslySetInnerHTML={{ __html: activePost.title.rendered }}
+                  />
+                  {excerpt && (
+                    <p className="mt-2 line-clamp-2 text-[12px] leading-5 text-white/78 sm:text-[13px]">
+                      {excerpt}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <div className="flex aspect-[2.55/1] min-h-[210px] items-center justify-center bg-[linear-gradient(135deg,#0f1f45_0%,#2764a8_48%,#101827_100%)] p-8 text-center text-white">
+              <p className="text-sm font-semibold">표시할 최신 글을 불러오는 중입니다.</p>
+            </div>
+          )}
+
+          {slides.length > 1 && (
+            <>
+              <button
+                type="button"
+                aria-label="이전 글"
+                onClick={() =>
+                  setActiveIndex((current) => (current - 1 + slides.length) % slides.length)
+                }
+                className="absolute left-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-blog-blue shadow transition hover:bg-white"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                aria-label="다음 글"
+                onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
+                className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-blog-blue shadow transition hover:bg-white"
+              >
+                ›
+              </button>
+              <div className="absolute bottom-3 right-4 flex gap-1.5">
+                {slides.map((post, index) => (
+                  <button
+                    key={post.id}
+                    type="button"
+                    aria-label={`${index + 1}번째 글 보기`}
+                    onClick={() => setActiveIndex(index)}
+                    className={`h-1.5 rounded-full transition ${
+                      activeIndex === index ? 'w-5 bg-white' : 'w-1.5 bg-white/45'
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
   )
 }

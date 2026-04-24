@@ -3,7 +3,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import Link from 'next/link'
-import type { WPPost, WPCategory } from '@/lib/wordpress'
+import type { WPCategory, WPPost } from '@/lib/wordpress'
 import PostCard from './PostCard'
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -22,66 +22,39 @@ export default function CategorySection({ category, posts, index }: CategorySect
 
   return (
     <section ref={ref} className="min-w-0">
-      {/* 섹션 헤더 */}
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.6, delay: 0.04 * index, ease: EASE_OUT }}
-        className="flex items-center justify-between mb-5 pb-3 border-b border-[#e5e2da]"
+        transition={{ duration: 0.45, delay: 0.04 * index, ease: EASE_OUT }}
+        className="mb-4 flex items-end justify-between border-b-2 border-blog-blue pb-1.5"
       >
-        <div className="flex items-center gap-2.5">
-          <h2
-            className="text-[#1a1a18]"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.0625rem, 2vw, 1.25rem)',
-              fontWeight: 400,
-            }}
-          >
+        <div className="flex min-w-0 items-center gap-1.5">
+          <span className="h-2 w-2 shrink-0 bg-blog-orange" />
+          <h2 className="truncate text-[15px] font-extrabold leading-none tracking-normal text-blog-navy">
             {category.name}
           </h2>
-          {category.count > 0 && (
-            <span
-              className="text-[#c0bdb5] text-[10px] tabular-nums"
-              style={{ fontFamily: 'var(--font-sans)' }}
-            >
-              {category.count}
-            </span>
-          )}
         </div>
-
         <Link
           href={`/blog?cat=${category.slug}`}
-          className="flex items-center gap-1.5 text-[#8c8c86] text-[10px] tracking-[0.2em] uppercase hover:text-[#c8a876] transition-colors duration-300 shrink-0"
-          style={{ fontFamily: 'var(--font-sans)' }}
+          className="shrink-0 text-[10px] font-bold uppercase tracking-normal text-blog-blue transition hover:text-blog-orange"
         >
-          더보기
-          <svg width="11" height="9" viewBox="0 0 12 10" fill="none" aria-hidden="true">
-            <path
-              d="M7 1L11 5M11 5L7 9M11 5H1"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          MORE +
         </Link>
       </motion.div>
 
-      {/* 3×3 포스트 카드 그리드 */}
-      <div className="grid grid-cols-3 gap-3 md:gap-4">
-        {posts.slice(0, 9).map((post, i) => (
+      <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+        {posts.slice(0, 6).map((post, i) => (
           <motion.div
             key={post.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{
-              duration: 0.65,
-              delay: 0.04 * index + 0.05 * i,
+              duration: 0.48,
+              delay: 0.04 * index + 0.035 * i,
               ease: EASE_OUT,
             }}
           >
-            <PostCard post={post} compact />
+            <PostCard post={post} />
           </motion.div>
         ))}
       </div>
