@@ -18,8 +18,6 @@ export default function CategorySection({ category, posts, index }: CategorySect
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
 
-  if (posts.length === 0) return null
-
   return (
     <section ref={ref} className="min-w-0">
       <motion.div
@@ -36,28 +34,36 @@ export default function CategorySection({ category, posts, index }: CategorySect
         </div>
         <Link
           href={`/blog?cat=${category.slug}`}
-          className="shrink-0 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400 transition hover:text-blog-orange"
+          className="shrink-0 rounded-full border border-slate-200 px-3 py-1.5 text-[11px] font-bold text-slate-500 transition hover:border-blog-orange hover:text-blog-orange"
         >
-          MORE +
+          더보기
         </Link>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {posts.slice(0, 6).map((post, i) => (
-          <motion.div
-            key={post.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{
-              duration: 0.58,
-              delay: 0.04 * index + 0.04 * i,
-              ease: EASE_OUT,
-            }}
-          >
-            <PostCard post={post} />
-          </motion.div>
-        ))}
-      </div>
+      {posts.length > 0 ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {posts.slice(0, 4).map((post, i) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.58,
+                delay: 0.04 * index + 0.04 * i,
+                ease: EASE_OUT,
+              }}
+            >
+              <PostCard post={post} />
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-5 py-12 text-center">
+          <p className="text-sm font-medium text-slate-500">
+            이 카테고리의 글을 준비하고 있습니다.
+          </p>
+        </div>
+      )}
     </section>
   )
 }

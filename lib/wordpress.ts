@@ -65,7 +65,7 @@ interface GraphQLCategoryNode {
 
 export const CATEGORY_ORDER = [
   { slug: 'notice', label: '공지 및 이벤트' },
-  { slug: 'review', label: '리얼 후기' },
+  { slug: 'review', label: '리얼-후기' },
   { slug: 'behind', label: '비하인드' },
   { slug: 'guide', label: '촬영 가이드' },
   { slug: 'branding', label: '퍼스널 브랜딩' },

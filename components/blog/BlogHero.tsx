@@ -18,47 +18,6 @@ export default function BlogHero({ posts }: BlogHeroProps) {
 
   return (
     <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-      <div className="relative overflow-hidden bg-white px-6 py-8 sm:px-8 sm:py-10">
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2 opacity-60" aria-hidden="true">
-          <svg viewBox="0 0 420 320" className="h-full w-full" preserveAspectRatio="xMaxYMid slice">
-            <ellipse cx="340" cy="155" rx="240" ry="210" fill="#f1f5f9" />
-            <ellipse cx="300" cy="45" rx="130" ry="90" fill="#ead8b9" />
-            <path
-              d="M-20 230 Q120 174 245 230 T480 230"
-              stroke="#020617"
-              strokeWidth="1.2"
-              fill="none"
-              opacity="0.08"
-            />
-            <path
-              d="M-20 270 Q120 214 245 270 T480 270"
-              stroke="#020617"
-              strokeWidth="1.2"
-              fill="none"
-              opacity="0.08"
-            />
-          </svg>
-        </div>
-
-        <div className="relative">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#b89662]">
-            PINO STUDIO BLOG
-          </p>
-          <h1
-            className="text-3xl font-medium leading-[1.12] tracking-normal text-slate-950 sm:text-5xl"
-            style={{ fontFamily: 'var(--font-display)' }}
-          >
-            시선을 머물게 하는 첫인상,
-            <br />
-            <span className="italic">PINO STUDIO</span>
-          </h1>
-          <p className="mt-5 max-w-xl text-[15px] leading-7 text-slate-500">
-            배우, 강사, 비즈니스 프로필부터 개인 화보까지. 당신의 가치를 증명하는
-            단 한 장의 사진을 만듭니다.
-          </p>
-        </div>
-      </div>
-
       <div className="relative h-[300px] overflow-hidden bg-slate-900 sm:h-[390px] lg:h-[430px]">
         {activePost ? (
           <Link href={`/blog/${activePost.id}`} className="group block h-full">
@@ -107,7 +66,7 @@ export default function BlogHero({ posts }: BlogHeroProps) {
               }
               className="absolute left-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/15 text-xl text-white backdrop-blur-sm transition hover:bg-white/25"
             >
-              ‹
+              &lt;
             </button>
             <button
               type="button"
@@ -115,7 +74,7 @@ export default function BlogHero({ posts }: BlogHeroProps) {
               onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
               className="absolute right-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/15 text-xl text-white backdrop-blur-sm transition hover:bg-white/25"
             >
-              ›
+              &gt;
             </button>
             <div className="absolute bottom-5 right-5 flex gap-2">
               {slides.map((post, index) => (
