@@ -78,12 +78,16 @@ async function fetchGraphQL<T>(
   query: string,
   variables?: Record<string, unknown>
 ): Promise<T | null> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), 8000)
+
   try {
     const res = await fetch(WP_GRAPHQL_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, variables }),
       next: { revalidate: 3600 },
+      signal: controller.signal,
     })
 
     if (!res.ok) return null
@@ -93,6 +97,8 @@ async function fetchGraphQL<T>(
     return json.data as T
   } catch {
     return null
+  } finally {
+    clearTimeout(timeout)
   }
 }
 
