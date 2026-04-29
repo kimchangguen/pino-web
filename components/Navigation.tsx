@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const navigationItems = [
+  { label: 'HOME', href: '/' },
   { label: 'FACILITIES', href: '/facilities' },
   { label: 'PORTFOLIO', href: '/portfolio' },
   {
@@ -27,24 +28,23 @@ export default function Navigation() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const headerStyle = scrolled
-    ? 'bg-white/80 shadow-[0_10px_30px_rgba(17,17,16,0.07)]'
-    : 'bg-white/58'
-
   const getNavClass = (href: string) => {
     const isActive =
-      pathname === href || (href === '/insights' && pathname.startsWith('/blog'))
+      pathname === href ||
+      (href === '/insights' && pathname.startsWith('/blog')) ||
+      (href === '/' && pathname === '/')
 
     return [
-      'text-[11px] font-semibold tracking-[0.22em] transition-colors duration-300',
-      'text-[#111110] hover:text-[#b89662]',
-      isActive ? 'text-[#1a1a18]' : '',
+      'text-[11px] font-medium tracking-[0.22em] transition-colors duration-300',
+      isActive ? 'text-[#111110]' : 'text-[#1a1a18]/68 hover:text-[#111110]',
     ].join(' ')
   }
 
   return (
     <header
-      className={`fixed left-0 right-0 top-0 z-50 border-b border-white/35 backdrop-blur-2xl transition-all duration-500 ${headerStyle}`}
+      className={`fixed left-0 right-0 top-0 z-50 border-b border-[#1a1a18]/10 backdrop-blur-2xl transition-all duration-500 ${
+        scrolled ? 'bg-[#faf7f0]/88 shadow-[0_10px_30px_rgba(17,17,16,0.07)]' : 'bg-[#faf7f0]/64'
+      }`}
     >
       <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6 lg:px-12">
         <Link
@@ -55,7 +55,7 @@ export default function Navigation() {
           PINO STUDIO
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex lg:gap-12">
+        <nav className="hidden items-center gap-8 md:flex lg:gap-11">
           {navigationItems.map((item) =>
             item.external ? (
               <a
@@ -63,16 +63,12 @@ export default function Navigation() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[11px] font-semibold tracking-[0.22em] text-[#111110] transition-colors duration-300 hover:text-[#b89662]"
+                className="text-[11px] font-medium tracking-[0.22em] text-[#1a1a18]/68 transition-colors duration-300 hover:text-[#111110]"
               >
                 {item.label}
               </a>
             ) : (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={getNavClass(item.href)}
-              >
+              <Link key={item.label} href={item.href} className={getNavClass(item.href)}>
                 {item.label}
               </Link>
             )
@@ -107,16 +103,9 @@ export default function Navigation() {
       {menuOpen && (
         <div
           id="mobile-navigation"
-          className="border-t border-[#1a1a18]/10 bg-white/88 px-6 py-7 backdrop-blur-2xl md:hidden"
+          className="border-t border-[#1a1a18]/10 bg-[#faf7f0]/96 px-6 py-7 backdrop-blur-2xl md:hidden"
         >
           <nav className="mx-auto flex max-w-7xl flex-col gap-6">
-            <Link
-              href="/"
-              onClick={() => setMenuOpen(false)}
-              className="text-xs font-semibold tracking-[0.24em] text-[#111110] transition-colors hover:text-[#b89662]"
-            >
-              HOME
-            </Link>
             {navigationItems.map((item) =>
               item.external ? (
                 <a
@@ -125,7 +114,7 @@ export default function Navigation() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMenuOpen(false)}
-                  className="text-xs font-semibold tracking-[0.24em] text-[#111110] transition-colors hover:text-[#b89662]"
+                  className="text-xs font-medium tracking-[0.24em] text-[#111110] transition-colors hover:text-[#8a6f48]"
                 >
                   {item.label}
                 </a>
@@ -134,7 +123,7 @@ export default function Navigation() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className="text-xs font-semibold tracking-[0.24em] text-[#111110] transition-colors hover:text-[#b89662]"
+                  className="text-xs font-medium tracking-[0.24em] text-[#111110] transition-colors hover:text-[#8a6f48]"
                 >
                   {item.label}
                 </Link>

@@ -3,9 +3,9 @@ import './globals.css'
 import Navigation from '@/components/Navigation'
 
 export const metadata: Metadata = {
-  title: 'PINO STUDIO | 피노스튜디오',
-  description: '빛과 순간을 담는 사진 스튜디오. 인물, 가족, 프로필, 웨딩 촬영 전문.',
-  keywords: '피노스튜디오, 사진 스튜디오, 프로필 촬영, 웨딩 촬영, 가족 사진',
+  title: 'PINO STUDIO',
+  description: '인물의 분위기와 브랜드의 결을 차분하게 기록하는 사진 스튜디오입니다.',
+  keywords: 'PINO STUDIO, 피노 스튜디오, 프로필 사진, 브랜드 프로필, 포트폴리오',
 }
 
 export default function RootLayout({
@@ -19,11 +19,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>

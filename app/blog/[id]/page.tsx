@@ -10,7 +10,7 @@ interface BlogPostPageProps {
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const { id } = await params
   const post = await getPost(id)
-  if (!post) return { title: 'Not Found | PINO STUDIO' }
+  if (!post) return { title: '글을 찾을 수 없습니다 | PINO STUDIO' }
   return {
     title: `${post.title.rendered} | PINO STUDIO`,
   }
@@ -24,59 +24,46 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const image = getFeaturedImage(post)
 
   return (
-    <main className="min-h-screen" style={{ background: '#fafaf6' }}>
-      {/* Hero image */}
+    <main className="min-h-screen bg-[#faf7f0] text-[#111110]">
       {image && (
-        <div className="w-full h-[55vh] md:h-[65vh] overflow-hidden relative">
+        <div className="relative h-[55vh] w-full overflow-hidden md:h-[65vh]">
           <img
             src={image}
             alt={post.title.rendered}
-            className="w-full h-full object-cover"
+            className="h-full w-full object-cover brightness-[0.94]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111110]/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/46 via-black/10 to-transparent" />
         </div>
       )}
 
-      {/* Article */}
       <article
-        className={`max-w-3xl mx-auto px-6 lg:px-0 ${image ? '-mt-24 relative z-10' : 'pt-36'}`}
+        className={`mx-auto max-w-3xl px-5 ${image ? 'relative z-10 -mt-24' : 'pt-36'}`}
       >
-        {/* Meta */}
-        <div
-          className={`${image ? 'mb-8' : 'mb-10'}`}
-          style={{ fontFamily: 'var(--font-sans)' }}
-        >
-          <p className="text-[#c8a876] text-[10px] tracking-[0.35em] uppercase mb-4">
+        <div className={`${image ? 'mb-8' : 'mb-10'}`}>
+          <p className="mb-4 text-[10px] font-medium uppercase tracking-[0.28em] text-[#8a6f48]">
             {formatDate(post.date)}
           </p>
           <h1
-            className={`leading-tight ${image ? 'text-white' : 'text-[#1a1a18]'}`}
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.875rem, 4vw, 3rem)',
-              fontWeight: 400,
-            }}
+            className={`text-[clamp(30px,4vw,48px)] font-medium leading-tight ${
+              image ? 'text-white' : 'text-[#111110]'
+            }`}
             dangerouslySetInnerHTML={{ __html: post.title.rendered }}
           />
         </div>
 
-        {/* Divider */}
-        <div className="w-12 h-px bg-[#c8a876] mb-10" />
+        <div className="mb-10 h-px w-12 bg-[#8a6f48]" />
 
-        {/* Content */}
         <div
           className="wp-content pb-20"
           dangerouslySetInnerHTML={{ __html: post.content.rendered }}
         />
 
-        {/* Back link */}
-        <div className="border-t border-[#e5e2da] pt-10 pb-20">
+        <div className="border-t border-[#1a1a18]/10 pb-20 pt-10">
           <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-[#8c8c86] hover:text-[#c8a876] transition-colors duration-300"
-            style={{ fontFamily: 'var(--font-sans)' }}
+            href="/insights"
+            className="inline-flex items-center gap-2 text-xs font-medium tracking-[0.22em] text-[#6f6a61] transition hover:text-[#111110]"
           >
-            ← 블로그 목록으로
+            인사이트 목록으로
           </Link>
         </div>
       </article>

@@ -17,7 +17,7 @@ const facilities = Array.from({ length: 30 }, (_, index) => {
   return {
     id: number,
     src: `/images/facilities/facility%20(${number}).jpg`,
-    alt: `PINO STUDIO facility ${number}`,
+    alt: `PINO STUDIO 시설 이미지 ${number}`,
   }
 })
 
@@ -73,7 +73,7 @@ export default function FacilitiesGallery() {
                   key={image.id}
                   type="button"
                   onClick={() => setActiveIndex(originalIndex)}
-                  className="group block w-full overflow-hidden rounded-[2px] bg-[#161513] text-left shadow-[0_18px_42px_rgba(17,17,16,0.12)]"
+                  className="group block w-full overflow-hidden bg-[#eee6da] text-left shadow-[0_18px_42px_rgba(90,70,42,0.12)]"
                   aria-label={`${image.alt} 크게 보기`}
                 >
                   <span className={`relative block ${ratio}`}>
@@ -82,11 +82,11 @@ export default function FacilitiesGallery() {
                       alt={image.alt}
                       fill
                       sizes="(min-width: 1024px) 28vw, (min-width: 768px) 44vw, 92vw"
-                      className="object-cover transition duration-700 group-hover:scale-[1.035]"
+                      className="object-cover brightness-[0.98] transition duration-700 group-hover:scale-[1.035] group-hover:brightness-105"
                     />
-                    <span className="absolute inset-0 bg-[#111110]/0 transition duration-500 group-hover:bg-[#111110]/12" />
-                    <span className="absolute bottom-3 left-3 rounded-full bg-white/88 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#111110] opacity-0 shadow-sm transition duration-300 group-hover:opacity-100">
-                      View
+                    <span className="absolute inset-0 bg-[#111110]/0 transition duration-500 group-hover:bg-[#111110]/8" />
+                    <span className="absolute bottom-3 left-3 bg-[#fffaf3]/92 px-3 py-1 text-[10px] font-medium tracking-[0.16em] text-[#111110] opacity-0 shadow-sm transition duration-300 group-hover:opacity-100">
+                      크게 보기
                     </span>
                   </span>
                 </button>
@@ -98,7 +98,7 @@ export default function FacilitiesGallery() {
 
       {activeImage && (
         <div
-          className="fixed inset-0 z-[80] flex items-center justify-center bg-[#080807]/92 px-4 py-6 backdrop-blur-sm"
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-black/88 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label="시설 사진 크게 보기"
@@ -108,7 +108,7 @@ export default function FacilitiesGallery() {
             type="button"
             aria-label="닫기"
             onClick={() => setActiveIndex(null)}
-            className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/10 text-lg font-semibold text-white transition hover:bg-white hover:text-[#111110]"
+            className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center border border-white/20 bg-white/10 text-lg font-semibold text-white transition hover:bg-white hover:text-black"
           >
             X
           </button>
@@ -124,7 +124,7 @@ export default function FacilitiesGallery() {
                   : (current - 1 + facilities.length) % facilities.length
               )
             }}
-            className="absolute left-4 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/10 text-xl font-semibold text-white transition hover:bg-white hover:text-[#111110]"
+            className="absolute left-4 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center border border-white/20 bg-white/10 text-xl font-semibold text-white transition hover:bg-white hover:text-black"
           >
             &lt;
           </button>
@@ -152,7 +152,7 @@ export default function FacilitiesGallery() {
                 current === null ? current : (current + 1) % facilities.length
               )
             }}
-            className="absolute right-4 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-white/10 text-xl font-semibold text-white transition hover:bg-white hover:text-[#111110]"
+            className="absolute right-4 top-1/2 z-10 grid h-11 w-11 -translate-y-1/2 place-items-center border border-white/20 bg-white/10 text-xl font-semibold text-white transition hover:bg-white hover:text-black"
           >
             &gt;
           </button>

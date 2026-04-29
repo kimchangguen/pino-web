@@ -17,42 +17,43 @@ export default function BlogHero({ posts }: BlogHeroProps) {
   const excerpt = activePost ? stripHtml(activePost.excerpt.rendered) : ''
 
   return (
-    <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
-      <div className="relative h-[300px] overflow-hidden bg-slate-900 sm:h-[390px] lg:h-[430px]">
+    <section className="overflow-hidden border border-[#1a1a18]/10 bg-[#fffaf3]">
+      <div className="relative h-[300px] overflow-hidden bg-[#eee6da] sm:h-[390px] lg:h-[430px]">
         {activePost ? (
           <Link href={`/blog/${activePost.id}`} className="group block h-full">
             {image ? (
               <img
                 src={image}
                 alt={stripHtml(activePost.title.rendered)}
-                className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.025]"
+                className="absolute inset-0 h-full w-full object-cover brightness-[0.92] transition duration-700 group-hover:scale-[1.025] group-hover:brightness-105"
               />
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-950 to-slate-700" />
+              <div className="absolute inset-0 bg-[#eee6da]" />
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/64 via-black/12 to-transparent" />
             <div className="absolute left-5 top-5">
-              <span className="inline-block rounded-full border border-white/20 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-                Featured Portfolio
+              <span className="inline-block bg-[#fffaf3]/90 px-3 py-1.5 text-xs font-medium text-[#111110] shadow-sm">
+                추천 글
               </span>
             </div>
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
               <h2
-                className="line-clamp-2 max-w-3xl text-2xl font-medium leading-tight text-white transition-colors group-hover:text-[#e8d3ad] sm:text-3xl"
-                style={{ fontFamily: 'var(--font-display)' }}
+                className="line-clamp-2 max-w-3xl text-2xl font-medium leading-tight text-white transition-colors sm:text-3xl"
                 dangerouslySetInnerHTML={{ __html: activePost.title.rendered }}
               />
               {excerpt && (
-                <p className="mt-3 line-clamp-2 max-w-2xl text-sm leading-relaxed text-white/65">
+                <p className="mt-3 line-clamp-2 max-w-2xl text-sm leading-relaxed text-white/76">
                   {excerpt}
                 </p>
               )}
-              <p className="mt-3 text-xs text-white/40">{formatDate(activePost.date)}</p>
+              <p className="mt-3 text-xs text-white/62">{formatDate(activePost.date)}</p>
             </div>
           </Link>
         ) : (
-          <div className="flex h-full items-center justify-center text-white">
-            <p className="text-sm font-semibold">표시할 포트폴리오를 불러오는 중입니다.</p>
+          <div className="flex h-full items-center justify-center text-[#111110]">
+            <p className="text-sm font-medium text-[#6f6a61]">
+              표시할 글을 준비하고 있습니다.
+            </p>
           </div>
         )}
 
@@ -64,7 +65,7 @@ export default function BlogHero({ posts }: BlogHeroProps) {
               onClick={() =>
                 setActiveIndex((current) => (current - 1 + slides.length) % slides.length)
               }
-              className="absolute left-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/15 text-xl text-white backdrop-blur-sm transition hover:bg-white/25"
+              className="absolute left-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center bg-[#fffaf3]/82 text-xl text-[#111110] backdrop-blur-sm transition hover:bg-white"
             >
               &lt;
             </button>
@@ -72,7 +73,7 @@ export default function BlogHero({ posts }: BlogHeroProps) {
               type="button"
               aria-label="다음 슬라이드"
               onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
-              className="absolute right-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/15 text-xl text-white backdrop-blur-sm transition hover:bg-white/25"
+              className="absolute right-4 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center bg-[#fffaf3]/82 text-xl text-[#111110] backdrop-blur-sm transition hover:bg-white"
             >
               &gt;
             </button>
@@ -84,7 +85,7 @@ export default function BlogHero({ posts }: BlogHeroProps) {
                   aria-label={`${index + 1}번째 슬라이드 보기`}
                   onClick={() => setActiveIndex(index)}
                   className={`h-2 rounded-full transition ${
-                    activeIndex === index ? 'w-7 bg-white' : 'w-2 bg-white/45'
+                    activeIndex === index ? 'w-7 bg-white' : 'w-2 bg-white/52'
                   }`}
                 />
               ))}
