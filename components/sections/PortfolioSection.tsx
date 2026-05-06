@@ -4,39 +4,45 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
+import type { PortfolioImage } from '@/lib/portfolio'
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
-const works = [
+const FEATURED_WORK_META = [
   {
     title: 'Concrete Light',
     category: '인물 프로필',
-    src: '/images/portfolio/portfolio%20(20).jpg',
     className: 'md:col-span-2',
   },
   {
     title: 'Black Object',
     category: '브랜드 스틸',
-    src: '/images/portfolio/portfolio%20(31).jpg',
     className: '',
   },
   {
     title: 'Profile Study',
     category: '개인 기록',
-    src: '/images/portfolio/portfolio%20(58).jpg',
     className: '',
   },
   {
     title: 'Evening Room',
     category: '스튜디오 무드',
-    src: '/images/facilities/facility%20(14).jpg',
     className: 'md:col-span-2',
   },
 ]
 
-export default function PortfolioSection() {
+export default function PortfolioSection({
+  images = [],
+}: {
+  images?: PortfolioImage[]
+}) {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-120px' })
+  const works = images.slice(0, FEATURED_WORK_META.length).map((image, index) => ({
+    ...FEATURED_WORK_META[index],
+    src: image.src,
+    alt: image.alt,
+  }))
 
   return (
     <section id="works" ref={ref} className="border-b border-[#1a1a18]/10 bg-[#faf7f0] px-5 py-24 md:py-32">
@@ -58,39 +64,47 @@ export default function PortfolioSection() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {works.map((work, index) => (
-            <motion.article
-              key={work.title}
-              initial={{ opacity: 0, y: 28 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.9, delay: index * 0.08, ease: EASE_OUT }}
-              className={work.className}
-            >
-              <Link href="/portfolio" className="group block">
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#eee6da]">
-                  <Image
-                    src={work.src}
-                    alt={work.title}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 92vw"
-                    className="object-cover brightness-[0.96] transition duration-700 group-hover:scale-[1.035] group-hover:brightness-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-transparent" />
-                </div>
-                <div className="mt-4 flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-[#111110]">{work.title}</h3>
-                    <p className="mt-1 text-[11px] text-[#7b746a]">{work.category}</p>
+        {works.length > 0 ? (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {works.map((work, index) => (
+              <motion.article
+                key={work.src}
+                initial={{ opacity: 0, y: 28 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.9, delay: index * 0.08, ease: EASE_OUT }}
+                className={work.className}
+              >
+                <Link href="/portfolio" className="group block">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#eee6da]">
+                    <Image
+                      src={work.src}
+                      alt={work.alt}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 92vw"
+                      className="object-cover brightness-[0.96] transition duration-700 group-hover:scale-[1.035] group-hover:brightness-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/18 via-transparent to-transparent" />
                   </div>
-                  <span className="text-[10px] font-medium text-[#9a9185]">
-                    0{index + 1}
-                  </span>
-                </div>
-              </Link>
-            </motion.article>
-          ))}
-        </div>
+                  <div className="mt-4 flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-sm font-medium text-[#111110]">{work.title}</h3>
+                      <p className="mt-1 text-[11px] text-[#7b746a]">{work.category}</p>
+                    </div>
+                    <span className="text-[10px] font-medium text-[#9a9185]">
+                      0{index + 1}
+                    </span>
+                  </div>
+                </Link>
+              </motion.article>
+            ))}
+          </div>
+        ) : (
+          <div className="border border-[#1a1a18]/10 bg-[#fffaf3] px-8 py-14 text-center">
+            <p className="text-sm leading-7 text-[#5d574f]">
+              포트폴리오 이미지를 준비하고 있습니다.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   )

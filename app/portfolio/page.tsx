@@ -1,41 +1,11 @@
-import { readdir } from 'fs/promises'
-import path from 'path'
 import type { Metadata } from 'next'
 import Footer from '@/components/Footer'
-import PortfolioGallery, {
-  type PortfolioImage,
-} from '@/components/portfolio/PortfolioGallery'
+import PortfolioGallery from '@/components/portfolio/PortfolioGallery'
+import { getPortfolioImages } from '@/lib/portfolio'
 
 export const metadata: Metadata = {
   title: 'Portfolio | PINO STUDIO',
   description: '피노 스튜디오의 인물, 브랜드, 공간 기록 포트폴리오를 소개합니다.',
-}
-
-async function getPortfolioImages(): Promise<PortfolioImage[]> {
-  const portfolioDir = path.join(process.cwd(), 'public', 'images', 'portfolio')
-
-  try {
-    const files = await readdir(portfolioDir)
-
-    return files
-      .map((file) => {
-        const match = /^portfolio \((\d+)\)\.jpg$/i.exec(file)
-        if (!match) return null
-
-        const id = Number(match[1])
-        if (id < 1 || id > 100) return null
-
-        return {
-          id,
-          src: `/images/portfolio/${encodeURIComponent(file)}`,
-          alt: `PINO STUDIO 포트폴리오 ${id}`,
-        }
-      })
-      .filter((image): image is PortfolioImage => image !== null)
-      .sort((a, b) => a.id - b.id)
-  } catch {
-    return []
-  }
 }
 
 export default async function PortfolioPage() {

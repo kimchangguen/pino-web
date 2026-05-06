@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion, useScroll, useTransform } from 'framer-motion'
 
 const EASE_OUT: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -17,15 +18,21 @@ export default function HeroSection() {
     >
       <motion.div
         aria-hidden="true"
-        className="absolute inset-x-0 -top-24 h-[calc(100%+12rem)] bg-cover bg-center opacity-[0.34]"
-        style={{
-          y: backgroundY,
-          backgroundImage: `url("${HERO_IMAGE}")`,
-        }}
-      />
-      <div className="absolute inset-0 bg-[#faf7f0]/68" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#faf7f0]/82 via-[#faf7f0]/42 to-[#faf7f0]/92" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.32),transparent_62%)]" />
+        className="absolute inset-x-0 -top-24 h-[calc(100%+12rem)] opacity-[0.56]"
+        style={{ y: backgroundY }}
+      >
+        <Image
+          src={HERO_IMAGE}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </motion.div>
+      <div className="absolute inset-0 bg-[#faf7f0]/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#faf7f0]/68 via-[#faf7f0]/28 to-[#faf7f0]/78" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.18),transparent_62%)]" />
       <div className="absolute inset-8 border border-[#1a1a18]/10" />
 
       <motion.div
@@ -40,7 +47,7 @@ export default function HeroSection() {
         <h1 className="mx-auto max-w-5xl text-[clamp(44px,7.6vw,104px)] font-medium leading-[0.95] text-[#111110]">
           당신의 결을 살리는
           <br />
-          정교한 한 장.
+          차분한 사진의 힘
         </h1>
         <p className="mx-auto mt-8 max-w-xl text-[15px] leading-8 text-[#4b4740]">
           부드러운 빛과 정적이 흐르는 공간에서, 가장 자신감 있는 순간을 차분하고

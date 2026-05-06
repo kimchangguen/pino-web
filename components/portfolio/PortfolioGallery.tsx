@@ -2,12 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useMemo, useState } from 'react'
-
-export interface PortfolioImage {
-  id: number
-  src: string
-  alt: string
-}
+import type { PortfolioImage } from '@/lib/portfolio'
 
 const aspectRatios = [
   'aspect-[4/5]',
